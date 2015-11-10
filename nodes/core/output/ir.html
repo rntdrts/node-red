@@ -1,0 +1,46 @@
+<script type="text/javascript">
+    RED.nodes.registerType('IR',{
+        category: 'output',
+        color: '#a6bbcf',
+        defaults: {
+            ip: {value: "", validate:RED.validators.regex(/\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/)},
+            command: {value:""},
+            sms: {value:""},
+            email: {value:""}
+        },
+        inputs:1,
+        outputs:0,
+        icon: "file.png",
+        label: function() {
+            return this.name||"IR";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="IR">
+    <div class="form-row">
+        <label for="node-input-ip"><i class="icon-tag"></i> IP</label>
+        <input type="text" id="node-input-ip" placeholder="IP">
+        <label for="node-input-command"><i class="icon-tag"></i> Command</label>
+        <input type="text" id="node-input-command" placeholder="Command">
+        <div class="row" style="margin:0;">
+            <label for="node-input-sms"><i class="icon-tag"></i> SMS</label>
+            <input type="checkbox" id="node-input-sms" placeholder="SMS">
+            <label for="node-input-email"><i class="icon-tag"></i> Email</label>
+            <input type="checkbox" id="node-input-email" placeholder="Email">
+        </div>
+    </div>
+    <script>
+        $('input[type=checkbox]').change(function(){
+            if($(this).prop("checked")) {
+                $(this).val(true); 
+            } else {
+                $(this).val(false);
+            }
+        });
+    </script>
+</script>
+
+<script type="text/x-red" data-help-name="IR">
+    <p>IR</p>
+</script>

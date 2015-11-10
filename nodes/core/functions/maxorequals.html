@@ -1,0 +1,27 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Max or equals',{
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            value: {value:"", validate:RED.validators.number()},
+            func: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return ">="+this.value||"Max Or Equals";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="Max or equals">
+    <div class="form-row">
+        <label for="node-input-value"><i class="icon-tag"></i> Value</label>
+        <input type="text" id="node-input-value" placeholder="Value">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="Max or equals">
+    <p>Max or equals (>=), greater or equals than...</p>
+</script>

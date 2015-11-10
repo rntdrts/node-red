@@ -18,15 +18,88 @@ var http = require('http');
 var https = require('https');
 var util = require("util");
 var express = require("express");
+var routes = require('./routes');
 var crypto = require("crypto");
 var nopt = require("nopt");
 var path = require("path");
 var fs = require("fs");
 var RED = require("./red/red.js");
 var log = require("./red/log");
+var passport = require('passport');
+var mongoose = require('mongoose');
+var config = require('./oauth.js');
+var User = require('./user.js');
+var auth = require('./authentication.js');
+
+// connect to the database
+mongoose.connect('mongodb://127.0.0.1:27017/test');
+
+// serialize and deserialize
+passport.serializeUser(function(user, done) {
+    console.log('serializeUser: ' + user._id)
+    done(null, user._id);
+});
+
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user){
+        console.log(user)
+        if(!err) done(null, user);
+        else done(err, null)
+    });
+});
 
 var server;
 var app = express();
+
+app.configure(function(){
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.logger());
+    app.use(express.cookieParser());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.session({ secret: 'cookie monster' }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+    app.use(app.router);
+});
+
+
+// routes
+app.get('/', routes.index);
+
+
+app.get('/', function(req, res){
+    res.render('login', { user: req.user });
+});
+
+app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
+    res.redirect('/red');
+});
+
+app.get('/auth/twitter',  passport.authenticate('twitter'));
+app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/' }), function(req, res) {
+    res.redirect('/red');
+});
+
+app.get('/auth/github', passport.authenticate('github'));
+app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/red');
+});
+
+app.get('/auth/google', passport.authenticate('google',{scope: 'https://www.googleapis.com/auth/plus.me https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'}));
+
+app.get('/auth/google/callback', passport.authenticate('google'), function(req, res) {
+        res.redirect('/red');
+});
+
+// test authentication
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/');
+}
 
 var settingsFile;
 var flowFile;
@@ -188,7 +261,6 @@ if (settings.httpAdminRoot !== false) {
 if (settings.httpNodeRoot !== false) {
     app.use(settings.httpNodeRoot,RED.httpNode);
 }
-
 if (settings.httpStatic) {
     settings.httpStaticAuth = settings.httpStaticAuth || settings.httpAuth;
     if (settings.httpStaticAuth) {
