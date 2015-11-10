@@ -18,6 +18,9 @@ var log = require("../log");
 
 var redNodes = require("../nodes");
 var settings = require("../settings");
+var mqtt = require("mqtt");
+
+var client = mqtt.connect("mqtt://192.168.160.122");
 
 module.exports = {
     get: function(req,res) {
@@ -35,5 +38,7 @@ module.exports = {
             log.warn(err.stack);
             res.json(500,{error:"unexpected_error", message:err.message});
         });
+
+        client.publish('MessageBroker', new Buffer(JSON.stringify({name:'test', data:flows})));
     }
 }
