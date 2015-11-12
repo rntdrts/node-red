@@ -5,19 +5,22 @@ html
     link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css', rel='stylesheet', media='screen')
   body
   .container
-    div(classs="row text-center")             
+    div(class="row text-center")             
       h1 IES.
       a(href="/") Go home
       p Authentication
-    
+
     br
-    a(href="/auth/facebook") Login via Facebook
-    br
-    a(href="/auth/twitter") Login via Twitter
-    br
-    a(href="/auth/github") Login via Github
-    br
-    a(href="/auth/google") Login via Google
+    div(class="container")
+      a(href="/login") Local Login
+      br
+      a(href="/signup") Local Signup
+      br
+      a(href="/auth/facebook") Facebook
+      br
+      a(href="/auth/twitter") Twitter
+      br
+      a(href="/auth/google") Google+
 
   script(src='http://code.jquery.com/jquery.js')
   script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')

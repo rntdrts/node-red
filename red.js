@@ -18,7 +18,6 @@ var http = require('http');
 var https = require('https');
 var util = require("util");
 var express = require("express");
-var routes = require('./routes');
 var crypto = require("crypto");
 var nopt = require("nopt");
 var path = require("path");
@@ -27,26 +26,12 @@ var RED = require("./red/red.js");
 var log = require("./red/log");
 var passport = require('passport');
 var mongoose = require('mongoose');
-var config = require('./oauth.js');
-var User = require('./user.js');
-var auth = require('./authentication.js');
+
+require('./config/passport')(passport); // pass passport for configuration
+
 
 // connect to the database
 mongoose.connect('mongodb://127.0.0.1:27017/test');
-
-// serialize and deserialize
-passport.serializeUser(function(user, done) {
-    console.log('serializeUser: ' + user._id)
-    done(null, user._id);
-});
-
-passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user){
-        console.log(user)
-        if(!err) done(null, user);
-        else done(err, null)
-    });
-});
 
 var server;
 var app = express();
@@ -64,42 +49,7 @@ app.configure(function(){
     app.use(app.router);
 });
 
-
-// routes
-app.get('/', routes.index);
-
-
-app.get('/', function(req, res){
-    res.render('login', { user: req.user });
-});
-
-app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
-    res.redirect('/red');
-});
-
-app.get('/auth/twitter',  passport.authenticate('twitter'));
-app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/' }), function(req, res) {
-    res.redirect('/red');
-});
-
-app.get('/auth/github', passport.authenticate('github'));
-app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/red');
-});
-
-app.get('/auth/google', passport.authenticate('google',{scope: 'https://www.googleapis.com/auth/plus.me https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'}));
-
-app.get('/auth/google/callback', passport.authenticate('google'), function(req, res) {
-        res.redirect('/red');
-});
-
-// test authentication
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/');
-}
+require('./app/routes')(app, passport); // load our routes and pass in our app and fully configured passport
 
 var settingsFile;
 var flowFile;
