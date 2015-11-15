@@ -254,9 +254,12 @@ if (settings.httpNodeRoot !== false && settings.httpNodeAuth) {
         })
     );
 }
+
 if (settings.httpAdminRoot !== false) {
-    app.use(settings.httpAdminRoot,RED.httpAdmin);
+    app.use(settings.httpAdminRoot, ensureAuthenticated);
+    app.use(settings.httpAdminRoot, RED.httpAdmin);
 }
+
 if (settings.httpNodeRoot !== false) {
     app.use(settings.httpNodeRoot,RED.httpNode);
 }
