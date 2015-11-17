@@ -55,6 +55,7 @@
     "mongoose": "^4.1.10",
     "mqtt": "^1.5.0",
     "mustache": "2.1.2",
+    "nconf": "^0.8.2",
     "nopt": "3.0.3",
     "oauth2orize": "1.0.1",
     "on-headers": "1.0.0",

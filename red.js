@@ -22,15 +22,20 @@ var crypto = require("crypto");
 var nopt = require("nopt");
 var path = require("path");
 var fs = require("fs");
-var RED = require("./red/red.js");
-var log = require("./red/log");
+
+var location =  process.cwd() + "/";
+
+var RED = require(location + "red/red");
+var log = require(location  +"red/log");
 var passport = require('passport');
 var mongoose = require('mongoose');
+
+var config = require(location + "config/config");
 
 require('./config/passport')(passport); // pass passport for configuration
 
 // connect to the database
-mongoose.connect('mongodb://127.0.0.1:27017/test');
+mongoose.connect(config.get('mongoose:uri'));
 
 var server;
 var app = express();
@@ -206,7 +211,7 @@ if (settings.httpNodeRoot !== false && settings.httpNodeAuth) {
 }
 
 if (settings.httpAdminRoot !== false) {
-    app.use(settings.httpAdminRoot, ensureAuthenticated);
+    //app.use(settings.httpAdminRoot, ensureAuthenticated);
     app.use(settings.httpAdminRoot, RED.httpAdmin);
 }
 
