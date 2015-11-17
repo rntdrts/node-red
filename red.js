@@ -29,7 +29,6 @@ var mongoose = require('mongoose');
 
 require('./config/passport')(passport); // pass passport for configuration
 
-
 // connect to the database
 mongoose.connect('mongodb://127.0.0.1:27017/test');
 
