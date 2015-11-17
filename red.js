@@ -53,7 +53,7 @@ app.configure(function(){
     app.use(app.router);
 });
 
-require('./app/routes')(app, passport); // load our routes and pass in our app and fully configured passport
+var multiuser = require('./app/routes')(app, passport); // load our routes and pass in our app and fully configured passport
 
 var settingsFile;
 var flowFile;
@@ -211,7 +211,10 @@ if (settings.httpNodeRoot !== false && settings.httpNodeAuth) {
 }
 
 if (settings.httpAdminRoot !== false) {
-    //app.use(settings.httpAdminRoot, ensureAuthenticated);
+    app.use(settings.httpAdminRoot, function(req, res, next) {
+        if (req.isAuthenticated()) { return next(); }
+        res.redirect('/');
+    });
     app.use(settings.httpAdminRoot, RED.httpAdmin);
 }
 
