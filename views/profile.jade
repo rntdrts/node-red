@@ -6,13 +6,13 @@ html
     body
     .container
         h3 Local
-        if user.local.email
+        if user.local.username
             p
                 strong id
                 | : #{ user._id}
                 br
-                strong email
-                | : #{ user.local.email}
+                strong username
+                | : #{ user.local.username}
                 br
                 strong password
                 | : #{ user.local.password}
