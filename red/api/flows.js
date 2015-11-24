@@ -27,7 +27,10 @@ module.exports = {
     get: function(req,res) {
         Nodes.findOne({'user_id': req.user._id}, function(err, node) {
             if (err) return handleError(err);
-            res.json(JSON.parse(node.nodes));
+            if(node)
+                res.json(JSON.parse(node.nodes));
+            else
+                res.json([]);
         });
     },
     post: function(req,res) {
