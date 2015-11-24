@@ -14,7 +14,9 @@ credentials.json
 flows*.json
 nodes/node-red-nodes/
 node_modules
-public
+public/icons/
+public/red/
+public/vendor/
 locales/zz-ZZ
 nodes/core/locales/zz-ZZ
 .idea/*
