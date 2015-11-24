@@ -51,6 +51,7 @@ app.configure(function(){
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
+    app.use(express.static(location + 'public'));
 });
 
 var multiuser = require('./app/routes')(app, passport); // load our routes and pass in our app and fully configured passport

@@ -1,6 +1,9 @@
 /**
  * Created by ricardomendes on 11/11/15.
  */
+var src = process.cwd() + '/app/';
+var Peer = require(src + 'models/peer');
+
 module.exports = function (app, passport) {
 
 // normal routes ===============================================================
@@ -17,10 +20,112 @@ module.exports = function (app, passport) {
         });
     });
 
-    app.get('/teste', isLoggedIn, function (req, res) {
-        res.json({h1: "TESTE"});
+    app.get('/home', isLoggedIn, function (req, res) {
+        res.render('home', {
+            user: req.user
+        });
     });
 
+    // Peers
+
+    app.get('/peer', isLoggedIn, function (req, res) {
+        Peer.find(function (err, peers) {
+            if (!err) {
+                res.render('peers/index', {user: req.user, Peers: peers});
+            } else {
+                res.statusCode = 500;
+
+                return res.json({
+                    error: 'Server error'
+                });
+            }
+        });
+    });
+
+    app.get('/peer/new', isLoggedIn, function (req, res) {
+        res.render('peers/new',{
+            user: req.user
+        });
+    });
+
+    app.post('/peer/create', isLoggedIn, function (req, res) {
+        console.log(req.query);
+        console.log(req.body);
+
+        var paramObj = {
+            name: req.body['name'],
+            description: req.body['description'],
+            ip: req.body['ip']
+        };
+
+        Peer.create(paramObj, function PeerCreated(err, peer) {
+            if (err) {
+                console.log(err);
+                return res.redirect('/peer/new');
+            }
+            res.redirect('/peer/show?id=' + peer.id);
+
+        });
+    });
+
+    app.get('/peer/show', isLoggedIn, function (req, res) {
+        console.log(req.query);
+        console.log(req.body);
+
+        Peer.findOne(req.query['id'], function (err, peer) {
+            if (err) return next(err);
+            if (!peer) return next();
+
+            res.render('peers/show',{
+                Peer: peer
+            });
+        });
+    });
+
+    app.get('/peer/edit', isLoggedIn, function (req, res) {
+        Peer.findOne(req.query['id'], function (err, peer) {
+            if (err) return next(err);
+            if (!peer) return next('Peer doesn\'t exist.');
+
+            res.render('peers/edit',{
+                Peer: peer
+            });
+        });
+    });
+
+    app.post('/peer/update', isLoggedIn, function (req, res) {
+
+        var paramObj = {
+            name: req.body['name'],
+            description: req.body['description'],
+            ip: req.body['ip']
+        };
+
+        Peer.update(req.query['id'], paramObj, function (err) {
+            if (err) {
+                console.log(err);
+                return res.redirect('/peer/edit?id=' + req.query['id']);
+            }
+            res.redirect('/peer/show?id=' + req.query['id']);
+        });
+    });
+
+    app.post('/peer/destroy', isLoggedIn, function (req, res) {
+        Peer.findOne(req.body['id'], function (err, peer) {
+            if (err) return next(err);
+
+            if (!peer) return next('Peer doesn\'t exist.');
+
+            console.log(req.body['id']);
+            Peer.destroy(req.body['id'], function (err) {
+
+                if (err) return next(err);
+            });
+            res.redirect('/peer');
+        });
+    });
+
+    // Peers
 
     // LOGOUT ==============================
     app.get('/logout', function (req, res) {
@@ -42,7 +147,7 @@ module.exports = function (app, passport) {
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/profile', // redirect to the secure profile section
+        successRedirect: '/home', // redirect to the secure profile section
         failureRedirect: '/login', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
@@ -56,7 +161,7 @@ module.exports = function (app, passport) {
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/profile', // redirect to the secure profile section
+        successRedirect: '/home', // redirect to the secure profile section
         failureRedirect: '/signup', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
@@ -69,7 +174,7 @@ module.exports = function (app, passport) {
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect: '/profile',
+            successRedirect: '/home',
             failureRedirect: '/'
         }));
 
@@ -81,7 +186,7 @@ module.exports = function (app, passport) {
     // handle the callback after twitter has authenticated the user
     app.get('/auth/twitter/callback',
         passport.authenticate('twitter', {
-            successRedirect: '/profile',
+            successRedirect: '/home',
             failureRedirect: '/'
         }));
 
@@ -94,7 +199,7 @@ module.exports = function (app, passport) {
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
         passport.authenticate('google', {
-            successRedirect: '/profile',
+            successRedirect: '/home',
             failureRedirect: '/'
         }));
 
@@ -108,7 +213,7 @@ module.exports = function (app, passport) {
         //res.render('connect-local', {message: req.flash('loginMessage')});
     });
     app.post('/connect/local', passport.authenticate('local-signup', {
-        successRedirect: '/profile', // redirect to the secure profile section
+        successRedirect: '/home', // redirect to the secure profile section
         failureRedirect: '/connect/local', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
@@ -121,7 +226,7 @@ module.exports = function (app, passport) {
     // handle the callback after facebook has authorized the user
     app.get('/connect/facebook/callback',
         passport.authorize('facebook', {
-            successRedirect: '/profile',
+            successRedirect: '/home',
             failureRedirect: '/'
         }));
 
@@ -133,7 +238,7 @@ module.exports = function (app, passport) {
     // handle the callback after twitter has authorized the user
     app.get('/connect/twitter/callback',
         passport.authorize('twitter', {
-            successRedirect: '/profile',
+            successRedirect: '/home',
             failureRedirect: '/'
         }));
 
@@ -146,7 +251,7 @@ module.exports = function (app, passport) {
     // the callback after google has authorized the user
     app.get('/connect/google/callback',
         passport.authorize('google', {
-            successRedirect: '/profile',
+            successRedirect: '/home',
             failureRedirect: '/'
         }));
 
@@ -163,40 +268,43 @@ module.exports = function (app, passport) {
         user.local.username = undefined;
         user.local.password = undefined;
         user.save(function (err) {
-            res.redirect('/profile');
+            res.redirect('/home');
         });
     });
 
     // facebook -------------------------------
     app.get('/unlink/facebook', function (req, res) {
         var user = req.user;
+        user.facebook.id = undefined;
         user.facebook.token = undefined;
         user.facebook.email = undefined;
         user.facebook.name = undefined;
         user.save(function (err) {
-            res.redirect('/profile');
+            res.redirect('/home');
         });
     });
 
     // twitter --------------------------------
     app.get('/unlink/twitter', function (req, res) {
         var user = req.user;
+        user.twitter.id = undefined;
         user.twitter.token = undefined;
         user.twitter.displayName = undefined;
         user.twitter.username = undefined;
         user.save(function (err) {
-            res.redirect('/profile');
+            res.redirect('/home');
         });
     });
 
     // google ---------------------------------
     app.get('/unlink/google', function (req, res) {
         var user = req.user;
+        user.google.id = undefined;
         user.google.token = undefined;
         user.google.email = undefined;
         user.google.name = undefined;
         user.save(function (err) {
-            res.redirect('/profile');
+            res.redirect('/home');
         });
     });
 };

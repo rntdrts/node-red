@@ -1,0 +1,20 @@
+extends ../layout-home
+block content
+    .container
+        .row
+            .col-md-12
+                form(action="/peer/update?id=#{Peer.id}" method="POST" class="edit")
+                    .form-group
+                        h2 editing a Peer
+
+                        .form-group(style="width: 400px;")
+                            label Name
+                            input(value="#{Peer.name}" name="name" type="text" class="form-control")
+                        .form-group(style="width: 400px;")
+                            label Description
+                            input(value="#{Peer.description}" name="description" type="text" class="form-control")
+                        .form-group(style="width: 400px;")
+                            label IP
+                            input(value="#{Peer.ip}" name="ip" type="text" class="form-control")
+                    input(type="submit" value="Update" class="btn btn-default")
+                a(href="/Peer/show?id=#{Peer.id}" class="btn btn-danger") Cancel

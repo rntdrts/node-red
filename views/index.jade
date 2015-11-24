@@ -1,26 +1,35 @@
-html
-  head
-    title= title
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css', rel='stylesheet', media='screen')
-  body
-  .container
-    div(class="row text-center")             
-      h1 IES.
-      a(href="/") Go home
-      p Authentication
+extends layout
 
-    br
-    div(class="container")
-      a(href="/login") Local Login
-      br
-      a(href="/signup") Local Signup
-      br
-      a(href="/auth/facebook") Facebook
-      br
-      a(href="/auth/twitter") Twitter
-      br
-      a(href="/auth/google") Google+
-
-  script(src='http://code.jquery.com/jquery.js')
-  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+block content
+    .container.centered
+        .row
+            .col-md-12
+                h1 IES
+        .row.mt
+            .col-sm-8.col-md-offset-2
+                .row
+                    .col-sm-4
+                        a(href='/login')
+                            i.ion-locked
+                            p Local Login
+                    .col-sm-4
+                        a(href='/signup')
+                            i.ion-locked
+                            p Local Signup
+                    .col-sm-4
+                        a(href='/auth/facebook')
+                            i.ion-social-facebook
+                            p Facebook
+                .row
+                    .col-sm-4
+                        a(href='/auth/twitter')
+                            i.ion-social-twitter
+                            p Twitter
+                    .col-sm-4
+                        a(href='/auth/google')
+                            i.ion-social-googleplus
+                            p Google+
+                    .col-sm-4
+                        a(href='http://www.ua.pt')
+                            i.ion-university
+                            p UA
