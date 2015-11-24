@@ -1,85 +1,87 @@
-html
-    head
-        title= title
-        meta(name='viewport', content='width=device-width, initial-scale=1.0')
-        link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css', rel='stylesheet', media='screen')
-    body
+extends layout-home
+block content
     .container
-        h3 Local
-        if user.local.username
-            p
-                strong id
-                | : #{ user._id}
-                br
-                strong username
-                | : #{ user.local.username}
-                br
-                strong password
-                | : #{ user.local.password}
-                br
-            a(href="/unlink/local") Unlink
-        else
-            a(href="/connect/local") Connect Local
-        hr
-        h3 Facebook
+        .row
+            .col-md-6
+                h3 Local
+                if user.local.username
+                    p
+                        strong id
+                        | : #{ user._id}
+                        br
+                        strong username
+                        | : #{ user.local.username}
+                        br
+                        strong password
+                        | : #{ user.local.password}
+                        br
+                    a(href="/unlink/local") Unlink
+                else
+                    a(href="/connect/local") Connect Local
+                hr
+            .col-md-6
+                h3 Facebook
 
-        if user.facebook.token
-            p
-                strong id
-                | : #{ user.facebook.id}
-                br
-                strong token
-                | : #{ user.facebook.token}
-                //br
-                //strong email
-                //| : #{ user.facebook.email}
-                br
-                strong name
-                | : #{ user.facebook.name}
-                br
-            a(href="/unlink/facebook") Unlink
-        else
-            a(href="/connect/facebook") Connect Facebook
-        
-        hr
-        h3 Twitter
+                if user.facebook.token
+                    p
+                        strong id
+                        | : #{ user.facebook.id}
+                        br
+                        strong token
+                        | : #{ user.facebook.token.substring(0,48)}
+                        //br
+                        //strong email
+                        //| : #{ user.facebook.email}
+                        br
+                        strong name
+                        | : #{ user.facebook.name}
+                        br
+                    a(href="/unlink/facebook") Unlink
+                else
+                    a(href="/connect/facebook") Connect Facebook
 
-        if user.twitter.token
-            p
-                strong id
-                | : #{ user.twitter.id}
-                br
-                strong    token
-                | : #{ user.twitter.token}
-                br
-                strong display name
-                | : #{ user.twitter.displayName}
-                br
-                strong username
-                | : #{ user.twitter.username}
-                br
-            a(href="/unlink/twitter") Unlink
-        else
-            a(href="/connect/twitter") Connect Twitter
+                hr
+        .row
+            .col-md-6
+                h3 Twitter
 
-        hr
-        h3 Google+
+                if user.twitter.token
+                    p
+                        strong id
+                        | : #{ user.twitter.id}
+                        br
+                        strong    token
+                        | : #{ user.twitter.token}
+                        br
+                        strong display name
+                        | : #{ user.twitter.displayName}
+                        br
+                        strong username
+                        | : #{ user.twitter.username}
+                        br
+                    a(href="/unlink/twitter") Unlink
+                else
+                    a(href="/connect/twitter") Connect Twitter
 
-        if user.google.token
-            p
-                strong id
-                | : #{ user.google.id}
-                br
-                strong token
-                | : #{ user.google.token}
-                br
-                strong email
-                | : #{ user.google.email}
-                br
-                strong name
-                | : #{ user.google.name}
-                br
-            a(href="/unlink/google") Unlink
-        else
-            a(href="/connect/google") Connect Google
-        hr
+                hr
+            .col-md-6
+                h3 Google+
+
+                if user.google.token
+                    p
+                        strong id
+                        | : #{ user.google.id}
+                        br
+                        strong token
+                        | : #{ user.google.token}
+                        br
+                        strong email
+                        | : #{ user.google.email}
+                        br
+                        strong name
+                        | : #{ user.google.name}
+                        br
+                    a(href="/unlink/google") Unlink
+                else
+                    a(href="/connect/google") Connect Google
+                hr

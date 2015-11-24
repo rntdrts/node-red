@@ -1,0 +1,21 @@
+extends ../layout-home
+block content
+	.container
+		.row
+			.col-md-12
+				form(class="show")
+					.form-group
+						h2 a Peer
+					.form-group(style="width: 400px;")
+						label Name
+						input(value="#{Peer.name}" name="name" type="text" class="form-control" disabled)
+					.form-group(style="width: 400px;")
+						label Description
+						input(value="#{Peer.description}" name="description" type="text" class="form-control" disabled)
+					.form-group(style="width: 400px;")
+						label IP
+						input(value="#{Peer.ip}" name="ip" type="text" class="form-control" disabled)
+
+				a(href="/Peer/edit?id=#{Peer.id}" class="btn btn-default")  Edit
+				| |
+				a(href="/Peer") Back to list
