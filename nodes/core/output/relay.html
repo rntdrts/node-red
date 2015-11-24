@@ -3,22 +3,37 @@
         category: 'output',
         color: '#a6bbcf',
         defaults: {
-            name: {value:""},
+            on_off: {value:""},
+            sms: {value:""},
+            email: {value:""},
             func: {value:""}
         },
         inputs:1,
         outputs:0,
         icon: "file.png",
         label: function() {
-            return this.name||"Relay";
+            return this.on_off === false ? "Relay (off)" : this.on_off === true ? "Relay (on)" : "Relay";
         }
     });
 </script>
 
 <script type="text/x-red" data-template-name="Relay">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <label for="node-input-on_off"><i class="icon-tag"></i> On or Off</label>
+        <input type="checkbox" id="node-input-on_off">
+        <label for="node-input-sms"><i class="icon-tag"></i> SMS</label>
+        <input type="checkbox" id="node-input-sms" placeholder="SMS">
+        <label for="node-input-email"><i class="icon-tag"></i> Email</label>
+        <input type="checkbox" id="node-input-email" placeholder="Email">
+        <script>
+            $('input[type=checkbox]').change(function(){
+                if($(this).prop("checked")) {
+                    $(this).val(true);
+                } else {
+                    $(this).val(false);
+                }
+            });
+        </script>
     </div>
 </script>
 
