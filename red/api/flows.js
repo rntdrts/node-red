@@ -19,13 +19,16 @@ var log = require("../log");
 var redNodes = require("../nodes");
 var settings = require("../settings");
 var mqtt = require("mqtt");
+var Nodes = require("../../app/models/nodes");
 
 var client = mqtt.connect("mqtt://192.168.160.122");
 
 module.exports = {
     get: function(req,res) {
-        log.audit({event: "flows.get"},req);
-        res.json(redNodes.getFlows());
+        Nodes.findOne({'user_id': req.user._id}, function(err, node) {
+            if (err) return handleError(err);
+            res.json(JSON.parse(node.nodes));
+        });
     },
     post: function(req,res) {
         var flows = req.body;
@@ -37,6 +40,19 @@ module.exports = {
             log.warn(log._("api.flows.error-save",{message:err.message}));
             log.warn(err.stack);
             res.json(500,{error:"unexpected_error", message:err.message});
+        });
+
+        Nodes.findOne({'user_id': req.user._id}, function(err, node) {
+            if (!node) {
+                var nodeElement = new Nodes({user_id: req.user._id, nodes: [JSON.stringify(flows)]});
+                nodeElement.save(function (err) {
+                    if (err) return handleError(err);
+                })
+            }
+            node.nodes = [JSON.stringify(flows)];
+            node.save(function (err) {
+                if (err) return handleError(err);
+            })
         });
 
         client.publish('MessageBroker', new Buffer(JSON.stringify({name:'test', data:flows})));
