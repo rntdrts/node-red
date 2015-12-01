@@ -132,8 +132,8 @@ function getJson(flows) {
 function formuleRules(rules, flows) {
     for (var i = 0; i < rules.length; i++) {
         var x1 = rules[i].x1, x2 = rules[i].x2, x3 = rules[i].x3;
-        flows[x1.index].func = x2.rule.type + ' ' + x1.rule.type;
-        var rule3 = '';
+        var rule3 = x3.rule.func = x1.rule.func = x2.rule.func = '';
+        x1.rule.func = x2.rule.type + ' ' + x1.rule.type;
         switch(x1.rule.type) {
             case 'Temperature':
                 x2.rule.func = flows[x2.index].func = 'temp : Temperature(getReadState() == true, currentTemp' +
@@ -144,25 +144,25 @@ function formuleRules(rules, flows) {
                 break;
             case 'Pir':
                 x1.rule.func = "Movement detector";
-                flows[x2.index].func = 'pir : PIRSensor( getCurrentState() == ' + (x2.rule.value ? true : false) + ')';
-                rul3 = 'pir.setCurrentState(false); System.out.println("PIRSensor rule: Movement detected!");';
+                x2.rule.func = 'pir : PIRSensor( getCurrentState() == ' + (x2.rule.value ? true : false) + ')';
+                rule3 = 'pir.setCurrentState(false); System.out.println("PIRSensor rule: Movement detected!");';
                 break;
         }
 
         var d = new Date();
 
         if (x3.rule.sms_checkbox) {
-            flows[x3.index].func = 'Notification.sendSMS("'+x3.rule.sms+'", "'+ d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'"); \n';
+            x3.rule.func = 'Notification.sendSMS("'+x3.rule.sms+'", "'+ d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         if (x3.rule.whats_app_checkbox) {
-            flows[x3.index].func += 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", "'+d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'"); \n';
+            x3.rule.func =  x3.rule.func + 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", "'+d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         if (x3.rule.email_checkbox) {
-            flows[x3.index].func += 'Notification.sendEmail("'+x3.rule.email+'", "'+d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'"); \n';
+            x3.rule.func = x3.rule.func + 'Notification.sendEmail("'+x3.rule.email+'", "'+d.toISOString()+'", "IESI", "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
-        x3.rule.func = flows[x3.index].func += rule3;
 
-        console.log(new Buffer(JSON.stringify({name: x1.rule.func, data : [x1.rule, x2.rule, x3.rule]})))
+        x3.rule.func += rule3;
+
         client.publish('MessageBroker', new Buffer(JSON.stringify({name: x1.rule.func, data : [x1.rule, x2.rule, x3.rule]})));
     }
 
