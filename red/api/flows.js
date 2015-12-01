@@ -157,7 +157,7 @@ function formuleRules(rules, flows) {
             flows[x3.index].func += 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         if (x3.rule.email_checkbox) {
-            flows[x3.index].func += 'Notification.sendEmail("+351'+x3.rule.email+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func += 'Notification.sendEmail("'+x3.rule.email+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         flows[x3.index].func += rule3;
     }
