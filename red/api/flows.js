@@ -177,7 +177,7 @@ function formuleRules(rules, flows) {
         x3.rule.func += rule3;
 
         client.publish('MessageBroker', new Buffer(JSON.stringify({
-            name: x1.rule.name,
+            name: x1.rule.name+guid(),
             data: [x1.rule, x2.rule, x3.rule]
         })));
     }
@@ -208,4 +208,14 @@ function setConditionRules(rule) {
     }
 
     return value;
+}
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
 }
