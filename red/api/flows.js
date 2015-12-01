@@ -152,16 +152,17 @@ function formuleRules(rules, flows) {
         var d = new Date();
 
         if (x3.rule.sms_checkbox) {
-            flows[x3.index].func = 'Notification.sendSMS("'+x3.rule.sms+'", "'+ d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func = 'Notification.sendSMS("'+x3.rule.sms+'", "'+ d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'"); \n';
         }
         if (x3.rule.whats_app_checkbox) {
-            flows[x3.index].func += 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", "'+d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func += 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", "'+d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'"); \n';
         }
         if (x3.rule.email_checkbox) {
-            flows[x3.index].func += 'Notification.sendEmail("'+x3.rule.email+'", "'+d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func += 'Notification.sendEmail("'+x3.rule.email+'", "'+d.toISOString()+'", "'+x3.rule.message+'", "'+x3.rule.id+'"); \n';
         }
         x3.rule.func = flows[x3.index].func += rule3;
 
+        console.log(new Buffer(JSON.stringify({name: x1.rule.func, data : [x1.rule, x2.rule, x3.rule]})))
         client.publish('MessageBroker', new Buffer(JSON.stringify({name: x1.rule.func, data : [x1.rule, x2.rule, x3.rule]})));
     }
 
