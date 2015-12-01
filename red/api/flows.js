@@ -150,18 +150,16 @@ function formuleRules(rules, flows) {
                 break;
         }
 
-        var d = new Date(),
-            date = [d.getFullYear(), d.getMonth()+1, d.getDate()].join('-')+'T'
-                    + [d.getHours(), d.getMinutes(), d.getSeconds()+30].join(':');
+        var d = new Date();
 
         if (x3.rule.sms_checkbox) {
-            flows[x3.index].func = 'Notification.sendSMS("'+x3.rule.sms+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func = 'Notification.sendSMS("'+x3.rule.sms+'", '+ d.toISOString()+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         if (x3.rule.whats_app_checkbox) {
-            flows[x3.index].func += 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func += 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", '+d.toISOString()+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         if (x3.rule.email_checkbox) {
-            flows[x3.index].func += 'Notification.sendEmail("'+x3.rule.email+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func += 'Notification.sendEmail("'+x3.rule.email+'", '+d.toISOString()+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         x3.rule.func = flows[x3.index].func += rule3;
 
