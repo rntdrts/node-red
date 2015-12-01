@@ -60,7 +60,6 @@ module.exports = {
                 if (err) return handleError(err);
             })
             });
-        client.publish('MessageBroker', new Buffer(JSON.stringify({name:'test', data:flows})));
     }
 };
 
@@ -163,7 +162,7 @@ function formuleRules(rules, flows) {
         }
         x3.rule.func = flows[x3.index].func += rule3;
 
-        console.log(JSON.stringify({name: x1.rule.func, data : [x1.rule, x2.rule, x3.rule]}));
+        client.publish('MessageBroker', new Buffer(JSON.stringify({name: x1.rule.func, data : [x1.rule, x2.rule, x3.rule]})));
     }
 
     return flows;
