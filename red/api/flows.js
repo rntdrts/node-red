@@ -132,19 +132,20 @@ function getJson(flows) {
 
 function formuleRules(rules, flows) {
     for (var i = 0; i < rules.length; i++) {
-        var x1= rules[i].x1, x2 = rules[i].x2, x3 = rules[i].x3;
+        var x1 = rules[i].x1, x2 = rules[i].x2, x3 = rules[i].x3;
         flows[x1.index].func = x2.rule.type + ' ' + x1.rule.type;
         var rule3 = '';
         switch(x1.rule.type) {
             case 'Temperature':
-                flows[rules[i].x2.index].func = 'temp : Temperature(getReadState() == true, currentTemp' +
+                x2.rule.func = flows[x2.index].func = 'temp : Temperature(getReadState() == true, currentTemp' +
                     setConditionRules(x2.rule);
                 rule3 = x3.rule.on_or_off ? 'temp.setReadState(false); temp.setRelayON(); update(temp);' :
                     'temp.setReadState(false); temp.setRelayOff(); update(temp);';
 
                 break;
             case 'Pir':
-                flows[rules[i].x2.index].func = 'pir : PIRSensor( getCurrentState() == ' + (rule.value ? true : false) + ')';
+                x1.rule.func = "Movement detector";
+                flows[x2.index].func = 'pir : PIRSensor( getCurrentState() == ' + (x2.rule.value ? true : false) + ')';
                 rul3 = 'pir.setCurrentState(false); System.out.println("PIRSensor rule: Movement detected!");';
                 break;
         }
@@ -154,7 +155,7 @@ function formuleRules(rules, flows) {
                     + [d.getHours(), d.getMinutes(), d.getSeconds()+30].join(':');
 
         if (x3.rule.sms_checkbox) {
-            flows[x3.index].func = 'Notification.sendSMS("+351'+x3.rule.sms+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
+            flows[x3.index].func = 'Notification.sendSMS("'+x3.rule.sms+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
         if (x3.rule.whats_app_checkbox) {
             flows[x3.index].func += 'Notification.sendWhatsApp("+351'+x3.rule.sms+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
@@ -162,7 +163,9 @@ function formuleRules(rules, flows) {
         if (x3.rule.email_checkbox) {
             flows[x3.index].func += 'Notification.sendEmail("'+x3.rule.email+'", '+date+', "'+x3.rule.message+'", "'+x3.rule.id+'");';
         }
-        flows[x3.index].func += rule3;
+        x3.rule.func = flows[x3.index].func += rule3;
+
+        console.log(JSON.stringify({name: x1.rule.func, data : [x1.rule, x2.rule, x3.rule]}));
     }
 
     return flows;
