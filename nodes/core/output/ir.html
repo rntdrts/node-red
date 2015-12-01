@@ -4,8 +4,12 @@
         color: '#a6bbcf',
         defaults: {
             command: {value: ""},
+            sms_checkbox: {value: ""},
+            email_checkbox: {value: ""},
+            whats_app_checkbox: {value: ""},
             sms: {value: ""},
             email: {value: ""},
+            message: {value: ""},
             func: {value: ""}
         },
         inputs:1,
@@ -22,16 +26,24 @@
         <label for="node-input-command"><i class="icon-tag"></i> Command</label>
         <input type="text" id="node-input-command" placeholder="Command">
         <div class="row" style="margin:0;">
-            <label for="node-input-sms"><i class="icon-tag"></i> SMS</label>
-            <input type="checkbox" id="node-input-sms" placeholder="SMS">
+            <label for="node-input-sms_checkbox"><i class="icon-tag"></i> SMS</label>
+            <input type="checkbox" id="node-input-sms_checkbox" placeholder="SMS">
+            <label for="node-input-whats_app_checkbox"><i class="icon-tag"></i> WhatsApp</label>
+            <input type="checkbox" id="node-input-whats_app_checkbox">
+            <label for="node-input-sms"><i class="icon-tag"></i>Phone Number</label>
+            <input type="text" id="node-input-sms" placeholder="SMS">
+            <label for="node-input-email_checkbox"><i class="icon-tag"></i> Email</label>
+            <input type="checkbox" id="node-input-email_checkbox" placeholder="Email">
             <label for="node-input-email"><i class="icon-tag"></i> Email</label>
-            <input type="checkbox" id="node-input-email" placeholder="Email">
+            <input type="text" id="node-input-email" placeholder="Email">
+            <label for="node-input-message"><i class="icon-tag"></i>Message</label>
+            <textarea style="width: 91%;margin-top: 5px; resize: none;" id="node-input-message" placeholder="Message"/>
         </div>
     </div>
     <script>
         $('input[type=checkbox]').change(function(){
             if($(this).prop("checked")) {
-                $(this).val(true); 
+                $(this).val(true);
             } else {
                 $(this).val(false);
             }

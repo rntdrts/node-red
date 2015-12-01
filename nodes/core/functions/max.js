@@ -7,5 +7,5 @@ module.exports = function(RED) {
             node.send(msg);
         });
     }
-    RED.nodes.registerType("Maximum", MaxNode);
-}
+    RED.nodes.registerType("Max", MaxNode);
+};

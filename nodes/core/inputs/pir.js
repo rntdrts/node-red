@@ -7,5 +7,5 @@ module.exports = function(RED) {
             node.send(msg);
         });
     }
-    RED.nodes.registerType("pir", PIRNode);
+    RED.nodes.registerType("Pir", PIRNode);
 }

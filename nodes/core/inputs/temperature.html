@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('temperature',{
+    RED.nodes.registerType('Temperature',{
         category: 'input',
         color: '#a6bbcf',
         defaults: {
@@ -10,18 +10,18 @@
         outputs:1,
         icon: "file.png",
         label: function() {
-            return this.name||"temperature";
+            return this.name||"Temperature";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="temperature">
+<script type="text/x-red" data-template-name="Temperature">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="temperature">
+<script type="text/x-red" data-help-name="Temperature">
     <p>Input Temperature</p>
 </script>

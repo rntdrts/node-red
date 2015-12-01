@@ -7,5 +7,5 @@ module.exports = function(RED) {
             node.send(msg);
         });
     }
-    RED.nodes.registerType("Minimum", MinNode);
+    RED.nodes.registerType("Min", MinNode);
 }

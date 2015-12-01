@@ -3,28 +3,40 @@
         category: 'output',
         color: '#a6bbcf',
         defaults: {
-            on_off: {value:""},
-            sms: {value:""},
-            email: {value:""},
-            func: {value:""}
+            on_or_off: {value: ""},
+            sms_checkbox: {value: ""},
+            whats_app_checkbox: {value: ""},
+            sms: {value: ""},
+            email_checkbox: {value: ""},
+            email: {value: ""},
+            message: {value: ""},
+            func: {value: ""}
         },
         inputs:1,
         outputs:0,
         icon: "file.png",
         label: function() {
-            return this.on_off === false ? "Relay (off)" : this.on_off === true ? "Relay (on)" : "Relay";
+            return this.on_or_off === false ? "Relay (off)" : this.on_or_off === true ? "Relay (on)" : "Relay";
         }
     });
 </script>
 
 <script type="text/x-red" data-template-name="Relay">
     <div class="form-row">
-        <label for="node-input-on_off"><i class="icon-tag"></i> On or Off</label>
-        <input type="checkbox" id="node-input-on_off">
-        <label for="node-input-sms"><i class="icon-tag"></i> SMS</label>
-        <input type="checkbox" id="node-input-sms" placeholder="SMS">
+        <label for="node-input-on_or_off"><i class="icon-tag"></i> On or Off</label>
+        <input type="checkbox" id="node-input-on_or_off">
+        <label for="node-input-sms_checkbox"><i class="icon-tag"></i> SMS</label>
+        <input type="checkbox" id="node-input-sms_checkbox" placeholder="SMS">
+        <label for="node-input-whats_app_checkbox"><i class="icon-tag"></i> WhatsApp</label>
+        <input type="checkbox" id="node-input-whats_app_checkbox">
+        <label for="node-input-sms"><i class="icon-tag"></i>Phone Number</label>
+        <input type="text" id="node-input-sms" placeholder="SMS">
+        <label for="node-input-email_checkbox"><i class="icon-tag"></i> Email</label>
+        <input type="checkbox" id="node-input-email_checkbox" placeholder="Email">
         <label for="node-input-email"><i class="icon-tag"></i> Email</label>
-        <input type="checkbox" id="node-input-email" placeholder="Email">
+        <input type="text" id="node-input-email" placeholder="Email">
+        <label for="node-input-message"><i class="icon-tag"></i>Message</label>
+        <textarea style="width: 91%;margin-top: 5px; resize: none;" id="node-input-message" placeholder="Message"/>
         <script>
             $('input[type=checkbox]').change(function(){
                 if($(this).prop("checked")) {
