@@ -1,6 +1,3 @@
-/**
- * Created by ricardomendes on 11/11/15.
- */
 var src = process.cwd() + '/app/';
 var Peer = require(src + 'models/peer');
 
